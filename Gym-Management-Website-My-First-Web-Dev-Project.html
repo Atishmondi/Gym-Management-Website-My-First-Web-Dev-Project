@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #333;
+            padding: 10px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: inline-block;
+        }
+        .navbar a:hover {
+            background-color: #575757;
+        }
+        .section {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            margin: 20px auto;
+            width: 80%;
+            box-shadow: 0px 0px 10px gray;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    <script>
+        let users = [];
+        let trainingSessions = [];
+        let nutritionPlans = [];
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function registerUser(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            const user = {
+                firstName,
+                lastName,
+                email,
+                phone
+            };
+
+            users.push(user);
+            alert('Registration successful!');
+            showSection('profile');
+            updateProfile();
+        }
+
+        function updateProfile() {
+            const profileSection = document.getElementById('profile');
+            profileSection.innerHTML = `
+                <h1>Your Profile</h1>
+                <p><strong>Name:</strong> ${users[0].firstName} ${users[0].lastName}</p>
+                <p><strong>Email:</strong> ${users[0].email}</p>
+                <p><strong>Phone:</strong> ${users[0].phone}</p>
+            `;
+        }
+
+        function addTrainingSession() {
+            const sessionName = document.getElementById('sessionName').value;
+            const sessionDate = document.getElementById('sessionDate').value;
+
+            const session = {
+                sessionName,
+                sessionDate
+            };
+
+            trainingSessions.push(session);
+            alert('Training session added!');
+            updateTrainingSessions();
+        }
+
+        function updateTrainingSessions() {
+            const sessionsTable = document.getElementById('sessionsTable');
+            sessionsTable.innerHTML = `
+                <tr>
+                    <th>Session Name</th>
+                    <th>Date</th>
+                </tr>
+                ${trainingSessions.map(session => `
+                    <tr>
+                        <td>${session.sessionName}</td>
+                        <td>${session.sessionDate}</td>
+                    </tr>
+                `).join('')}
+            `;
+        }
+
+        function addNutritionPlan() {
+            const planName = document.getElementById('planName').value;
+            const calories = document.getElementById('calories').value;
+            const description = document.getElementById('description').value;
+
+            const plan = {
+                planName,
+                calories,
+                description
+            };
+
+            nutritionPlans.push(plan);
+            alert('Nutrition plan added!');
+            updateNutritionPlans();
+        }
+
+        function updateNutritionPlans() {
+            const plansTable = document.getElementById('plansTable');
+            plansTable.innerHTML = `
+                <tr>
+                    <th>Plan Name</th>
+                    <th>Calories</th>
+                    <th>Description</th>
+                </tr>
+                ${nutritionPlans.map(plan => `
+                    <tr>
+                        <td>${plan.planName}</td>
+                        <td>${plan.calories}</td>
+                        <td>${plan.description}</td>
+                    </tr>
+                `).join('')}
+            `;
+        }
+    </script>
+</head>
+<body>
+    <div class="navbar">
+        <a href="#" onclick="showSection('home')">Home</a>
+        <a href="#" onclick="showSection('about')">About Us</a>
+        <a href="#" onclick="showSection('trainings')">Trainings</a>
+        <a href="#" onclick="showSection('registration')">Register</a>
+        <a href="#" onclick="showSection('profile')">Profile</a>
+        <a href="#" onclick="showSection('nutrition')">Nutrition</a>
+    </div>
+    
+    <div id="home" class="section active">
+        <h1>Welcome to Fitness Club</h1>
+        <p>Achieve your fitness goals with us!</p>
+        <button onclick="showSection('registration')">Register Now</button>
+    </div>
+
+    <div id="about" class="section">
+        <h1>About Us</h1>
+        <p>We are a top-rated fitness club helping people live healthier lives for over 20 years.</p>
+    </div>
+
+    <div id="trainings" class="section">
+        <h1>Trainings</h1>
+        <ul>
+            <li>Strength Training</li>
+            <li>Aerobic Training</li>
+            <li>Balance and Stability Training</li>
+            <li>Flexibility and Mobility Training</li>
+        </ul>
+        <h2>Add Training Session</h2>
+        <form onsubmit="addTrainingSession(); return false;">
+            <label>Session Name:</label>
+            <input type="text" id="sessionName" required><br>
+            <label>Date:</label>
+            <input type="date" id="sessionDate" required><br>
+            <button type="submit">Add Session</button>
+        </form>
+        <h2>Your Training Sessions</h2>
+        <table id="sessionsTable"></table>
+    </div>
+
+    <div id="registration" class="section">
+        <h1>Register for Fitness Club</h1>
+        <form onsubmit="registerUser(event)">
+            <label>First Name:</label>
+            <input type="text" id="firstName" required><br>
+            <label>Last Name:</label>
+            <input type="text" id="lastName" required><br>
+            <label>Email:</label>
+            <input type="email" id="email" required><br>
+            <label>Phone:</label>
+            <input type="text" id="phone" required><br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div id="profile" class="section">
+        <h1>Your Profile</h1>
+        <p>Welcome! View your profile details here.</p>
+    </div>
+
+    <div id="nutrition" class="section">
+        <h1>Nutrition Plans</h1>
+        <h2>Add Nutrition Plan</h2>
+        <form onsubmit="addNutritionPlan(); return false;">
+            <label>Plan Name:</label>
+            <input type="text" id="planName" required><br>
+            <label>Calories:</label>
+            <input type="number" id="calories" required><br>
+            <label>Description:</label>
+            <textarea id="description" required></textarea><br>
+            <button type="submit">Add Plan</button>
+        </form>
+        <h2>Your Nutrition Plans</h2>
+        <table id="plansTable"></table>
+    </div>
+</body>
+</html>
